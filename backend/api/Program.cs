@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
+using api.Interfaces;
+using api.Interfaces.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

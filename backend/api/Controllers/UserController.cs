@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.User;
+using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,24 +17,27 @@ namespace api.Controllers
     public class UserController : ControllerBase
     {   
         private readonly ApplicationDBContext _context;
+        private readonly IUserRepository _userRepo;
 
-        public UserController(ApplicationDBContext context)
-        {
+        public UserController(ApplicationDBContext context, IUserRepository userRepository)
+        {   
+            _userRepo = userRepository;
             _context = context;
         }
 
         [HttpGet]
-        public  IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {   
-            var users = _context.Users.ToList();
+            var users = await _userRepo.GetAllAsync();
+            var usersDto = users.Select(u => u.ToUserDto());
 
-            return Ok(users);
+            return Ok(usersDto);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUser([FromRoute] int id)
+        public async Task<IActionResult> GetUser([FromRoute] int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _userRepo.GetByIdAsync(id);
 
             if(user == null)
             {
@@ -39,6 +45,15 @@ namespace api.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateUserRequestDto userDto)
+        {   
+            var userModel = userDto.ToUserFromCreateDTO();
+            await _userRepo.CreateAsync(userModel);
+
+            return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, userModel);
         }
     }
 }
