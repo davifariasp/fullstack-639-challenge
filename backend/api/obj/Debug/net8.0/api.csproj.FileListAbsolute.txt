@@ -146,3 +146,13 @@
 /Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/dotenv.net.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/firebase.json
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/FirebaseAdmin.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Google.Api.Gax.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Google.Api.Gax.Rest.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Google.Apis.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Google.Apis.Auth.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Google.Apis.Core.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/Newtonsoft.Json.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/System.Management.dll
+/Users/davifariasp/Documents/Challenges/fullstack_639/backend/api/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Management.dll

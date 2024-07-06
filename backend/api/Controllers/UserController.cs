@@ -58,7 +58,7 @@ namespace api.Controllers
             await _userRepo.CreateAsync(userModel);
 
             return Ok(
-                new UserDto
+                new LoginResponseDto
                 {
                     Name = userModel.Name,
                     Email = userModel.Email,
@@ -83,7 +83,7 @@ namespace api.Controllers
             }
 
             return Ok(
-                new UserDto
+                new LoginResponseDto
                 {
                     Name = user.Name,
                     Email = user.Email,

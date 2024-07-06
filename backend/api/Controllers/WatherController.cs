@@ -44,7 +44,7 @@ namespace api.Controllers
         public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
         {   
             try {
-                await _notificationService.SendNotificationAsync(request.Token, request.Title, request.Body);
+                await _notificationService.SendNotificationAsync(request.TokenDevice, request.Title, request.Body);
                 return Ok();
             } catch (Exception e) {
                 return BadRequest(e.Message);

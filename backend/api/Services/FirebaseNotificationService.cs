@@ -9,11 +9,11 @@ namespace api.Services
 {
     public class FirebaseNotificationService : IFirebaseNotificationService
     {
-        public async Task SendNotificationAsync(string token, string title, string body)
+        public async Task SendNotificationAsync(string tokenDevice, string title, string body)
         {
             var message = new Message()
         {
-            Token = token,
+            Token = tokenDevice,
             Notification = new Notification()
             {
                 Title = title,
