@@ -16,6 +16,7 @@ namespace api.Mappers
                 Id = userModel.Id,
                 Name = userModel.Name,
                 Email = userModel.Email,
+                TokenDevice = userModel.TokenDevice
             };
         }
 
@@ -29,7 +30,8 @@ namespace api.Mappers
                 Id = intRandom,
                 Name = userDto.Name,
                 Email = userDto.Email,
-                Password = userDto.Password
+                Password = userDto.Password,
+                TokenDevice = userDto.TokenDevice
             };
         }
     }

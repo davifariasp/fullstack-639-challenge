@@ -29,7 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetUsers()
         {   
             var users = await _userRepo.GetAllAsync();
