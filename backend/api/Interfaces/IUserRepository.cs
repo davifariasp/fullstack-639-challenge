@@ -12,5 +12,7 @@ namespace api.Interfaces
         Task<User?> GetByIdAsync(int id);
 
         Task<User> CreateAsync(User user);
+
+        Task<User?> GetByEmailAsync(string email);
     }
 }

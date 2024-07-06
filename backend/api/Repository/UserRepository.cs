@@ -37,5 +37,10 @@ namespace api.Interfaces.Repository
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

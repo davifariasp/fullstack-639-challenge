@@ -7,6 +7,7 @@ using api.Dtos.User;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,14 +19,17 @@ namespace api.Controllers
     {   
         private readonly ApplicationDBContext _context;
         private readonly IUserRepository _userRepo;
+        private readonly ITokenService _tokenService;
 
-        public UserController(ApplicationDBContext context, IUserRepository userRepository)
+        public UserController(ApplicationDBContext context, IUserRepository userRepository, ITokenService tokenService)
         {   
             _userRepo = userRepository;
+            _tokenService = tokenService;
             _context = context;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetUsers()
         {   
             var users = await _userRepo.GetAllAsync();
@@ -53,7 +57,39 @@ namespace api.Controllers
             var userModel = userDto.ToUserFromCreateDTO();
             await _userRepo.CreateAsync(userModel);
 
-            return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, userModel);
+            return Ok(
+                new UserDto
+                {
+                    Name = userModel.Name,
+                    Email = userModel.Email,
+                    Token = _tokenService.CreateToken(userModel)
+                }
+            );
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto userDto)
+        {
+            var user = await _userRepo.GetByEmailAsync(userDto.Email);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            if(user.Password != userDto.Password)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(
+                new UserDto
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                }
+            );
         }
     }
 }
