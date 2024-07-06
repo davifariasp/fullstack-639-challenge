@@ -1,3 +1,4 @@
+import 'package:app/Services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -13,10 +14,12 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController _passwordController;
   late ValueNotifier<bool> loading;
   late bool passHide;
+  late AuthService authService;
 
   @override
   void initState() {
     super.initState();
+    authService = AuthService();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     loading = ValueNotifier<bool>(false);
@@ -25,7 +28,19 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login() async {
     loading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
+    Map<String, dynamic> response = await authService.login(_emailController.text, _passwordController.text);
+
+    if (response['token'] != null) {
+      Modular.to.navigate('/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao logar'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+    
     loading.value = false;
   }
 

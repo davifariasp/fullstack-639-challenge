@@ -10,6 +10,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late ValueNotifier<bool> loading;
@@ -21,6 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     _getToken();
 
+    _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     loading = ValueNotifier<bool>(false);
@@ -47,6 +49,15 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: InputBorder.none,
+                      hintText: "Name"),
+                )),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(

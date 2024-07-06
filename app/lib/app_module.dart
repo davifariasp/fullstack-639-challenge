@@ -1,6 +1,6 @@
-import 'package:app/View/Screens/Home/home.dart';
-import 'package:app/View/Screens/Login/login.dart';
-import 'package:app/View/Screens/Register/register.dart';
+import 'package:app/View/Screens/Home/home_page.dart';
+import 'package:app/View/Screens/Login/login_page.dart';
+import 'package:app/View/Screens/Register/register_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {
