@@ -1,15 +1,17 @@
+import 'package:app/Services/http_use.dart';
 import 'package:app/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
+  final HttpUse httpUse = HttpUse();
+
   Future<Map<String, dynamic>> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/users/login'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({'email': email, 'password': password}),
+    final response = await httpUse.post(
+      url: '$baseUrl/users/login',
+      headers: {'Content-Type': 'application/json'},
+      body: {'email': email, 'password': password},
     );
 
     if (response.statusCode == 200) {
@@ -22,7 +24,6 @@ class AuthService {
 
   Future<Map<String, dynamic>> register(
       String name, String email, String password, String tokenDevice) async {
-
     final response = await http.post(
       Uri.parse('$baseUrl/users'),
       headers: {
