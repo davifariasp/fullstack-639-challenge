@@ -1,2 +1,5 @@
 .env
 firebase.json
+
+/bin
+/obj
