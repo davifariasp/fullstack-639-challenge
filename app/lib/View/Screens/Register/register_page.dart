@@ -33,7 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _getToken() async {
-    
     late String? token;
 
     if (Platform.isIOS) {
@@ -96,15 +95,38 @@ class _RegisterPageState extends State<RegisterPage> {
                       border: InputBorder.none,
                       hintText: "E-mail"),
                 )),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: InputBorder.none,
-                      hintText: "Password"),
-                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _passwordController,
+                          obscureText: passHide,
+                          decoration: const InputDecoration(
+                              labelText: 'Password',
+                              border: InputBorder.none,
+                              hintText: "Password"),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            passHide = !passHide;
+                          });
+                        },
+                        iconSize: 16,
+                        icon: Icon(
+                            passHide ? Icons.visibility : Icons.visibility_off),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(
               height: 30,
             ),

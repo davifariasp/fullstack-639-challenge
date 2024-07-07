@@ -27,8 +27,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login() async {
+    debugPrint('passou aqui');
+
     loading.value = true;
-    Map<String, dynamic> response = await authService.login(_emailController.text, _passwordController.text);
+    Map<String, dynamic> response = await authService.login(
+        _emailController.text, _passwordController.text);
 
     if (response['token'] != null) {
       Modular.to.navigate('/home');
@@ -40,79 +43,105 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
-    
+
     loading.value = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                      border: InputBorder.none,
-                      hintText: "E-mail"),
-                )),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: InputBorder.none,
-                      hintText: "Password"),
-                )),
-            const SizedBox(
-              height: 30,
-            ),
-            TextButton(
-              onPressed: () async => await login(),
-              style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFF6200EE),
-                foregroundColor: Colors.white,
-                fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                        labelText: 'E-mail',
+                        border: InputBorder.none,
+                        hintText: "E-mail"),
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _passwordController,
+                            obscureText: passHide,
+                            decoration: const InputDecoration(
+                                labelText: 'Password',
+                                border: InputBorder.none,
+                                hintText: "Password"),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              passHide = !passHide;
+                            });
+                          },
+                          iconSize: 16,
+                          icon: Icon(passHide
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              child: AnimatedBuilder(
-                animation: loading,
-                builder: (context, _) {
-                  return loading.value
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ))
-                      : const Text("Entrar", style: TextStyle(fontSize: 16));
-                },
+              const SizedBox(
+                height: 30,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Não possui uma conta? "),
-                InkWell(
-                  onTap: () => {
-                    Modular.to.navigate('/register')
-                  },
-                  child: const Text(
-                    "Cadastre-se",
-                    style: TextStyle(
-                        color: Color(0xFF6200EE), fontWeight: FontWeight.w600),
+              TextButton(
+                onPressed: () async => await login(),
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xFF6200EE),
+                  foregroundColor: Colors.white,
+                  fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ],
-            )
-          ],
+                child: AnimatedBuilder(
+                  animation: loading,
+                  builder: (context, _) {
+                    return loading.value
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ))
+                        : const Text("Entrar", style: TextStyle(fontSize: 16));
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Não possui uma conta? "),
+                  InkWell(
+                    onTap: () => {Modular.to.navigate('/register')},
+                    child: const Text(
+                      "Cadastre-se",
+                      style: TextStyle(
+                          color: Color(0xFF6200EE),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
