@@ -11,17 +11,17 @@ using api.Dtos.Notification;
 
 namespace api.Controllers
 {
-    public class WatherController : ControllerBase
+    public class WeatherController : ControllerBase
     {      
-        private readonly FirebaseNotificationService _notificationService;
+        // private readonly FirebaseNotificationService _notificationService;
 
-        public WatherController(FirebaseNotificationService notificationService)
-        {
-            _notificationService = notificationService;
-        }
+        // public WeatherController(FirebaseNotificationService notificationService)
+        // {
+        //     _notificationService = notificationService;
+        // }
 
-        [HttpGet("wather/{lat}&{lon}")]   
-        public async Task<IActionResult> GetWather([FromRoute] double lat, [FromRoute] double lon)
+        [HttpGet("weather/{lat}&{lon}")]   
+        public async Task<IActionResult> GetWeather([FromRoute] double lat, [FromRoute] double lon)
         {      
             //pegando a chave da api do arquivo .env
             var envVars = DotEnv.Read();
@@ -40,16 +40,16 @@ namespace api.Controllers
             }
         }
 
-        [HttpPost("notification")]
-        public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
-        {   
-            try {
-                await _notificationService.SendNotificationAsync(request.TokenDevice, request.Title, request.Body);
-                return Ok();
-            } catch (Exception e) {
-                return BadRequest(e.Message);
-            }
-        }
+        // [HttpPost("notification")]
+        // public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
+        // {   
+        //     try {
+        //         await _notificationService.SendNotificationAsync(request.TokenDevice, request.Title, request.Body);
+        //         return Ok();
+        //     } catch (Exception e) {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
 
     }
 }
