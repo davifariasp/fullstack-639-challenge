@@ -1,1 +1,1 @@
-const baseUrl = 'http://localhost:5050/api';
+const baseUrl = 'http://127.0.0.1:5050/api';

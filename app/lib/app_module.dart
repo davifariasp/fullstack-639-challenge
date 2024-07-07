@@ -9,13 +9,13 @@ class AppModule extends Module {
 
   @override
   void routes(r) {
-    r.child('/',
+    r.child('/login',
         child: (context) => const LoginPage(),
         transition: TransitionType.fadeIn);
     r.child('/register',
         child: (context) => const RegisterPage(),
         transition: TransitionType.fadeIn);
-    r.child('/home',
+    r.child('/',
         child: (context) => const HomePage(),
         transition: TransitionType.fadeIn);
   }

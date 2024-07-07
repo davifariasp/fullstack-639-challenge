@@ -12,24 +12,31 @@ class AuthService {
       body: jsonEncode({'email': email, 'password': password}),
     );
 
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return data;
     } else {
       return {'message': 'Erro ao logar'};
     }
-
   }
 
-  Future<Map<String, String>> register(
+  Future<Map<String, dynamic>> register(
       String name, String email, String password, String tokenDevice) async {
-    final response = await http.post(Uri.parse('$baseUrl/users/register'),
-        body: {
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/users'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {
           'name': name,
           'email': email,
           'password': password,
           'tokenDevice': tokenDevice
-        });
+        },
+      ),
+    );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

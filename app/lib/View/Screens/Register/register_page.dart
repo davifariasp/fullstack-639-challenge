@@ -1,6 +1,8 @@
+import 'package:app/Services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'dart:io' show Platform;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,13 +17,14 @@ class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController _passwordController;
   late ValueNotifier<bool> loading;
   late bool passHide;
+  late AuthService authService;
   String? _token;
 
   @override
   void initState() {
     super.initState();
     _getToken();
-
+    authService = AuthService();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
@@ -30,7 +33,18 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
+    
+    late String? token;
+
+    if (Platform.isIOS) {
+      await Future.delayed(const Duration(seconds: 2));
+      token = await FirebaseMessaging.instance.getAPNSToken();
+    } else {
+      token = await FirebaseMessaging.instance.getToken();
+    }
+
+    debugPrint('tokenDevice: $token');
+
     setState(() {
       _token = token;
     });
@@ -38,7 +52,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> register() async {
     loading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
+    Map<String, dynamic> response = await authService.register(
+        _nameController.text,
+        _emailController.text,
+        _passwordController.text,
+        _token!);
+
+    if (response['token'] != null) {
+      Modular.to.navigate('/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao logar'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
     loading.value = false;
   }
 
