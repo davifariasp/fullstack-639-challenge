@@ -7,8 +7,9 @@ class WeatherRepository extends IWeatherRepository {
   final HttpUse httpUse = HttpUse();
 
   @override
-  Future<dynamic> getWeather({required double lat, required double lon}) async {
+  Future<dynamic> getWeather({required String token, required double lat, required double lon}) async {
     final response = await httpUse.get(
+      headers: {'Authorization': 'Bearer $token'},
       url: '$baseUrl/weather/$lat&$lon',
     );
 

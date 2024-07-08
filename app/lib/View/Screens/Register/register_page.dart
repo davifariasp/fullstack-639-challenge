@@ -32,6 +32,15 @@ class _RegisterPageState extends State<RegisterPage> {
     passHide = true;
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    loading.dispose();
+    super.dispose();
+  }
+
   Future<void> _getToken() async {
     late String? token;
 
