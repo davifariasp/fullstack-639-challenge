@@ -91,10 +91,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   getWeather() async {
+    //pegar token
+    String token = await storage.read(key: 'token') ?? '';
     //pegar coordenadas
     await getLocation();
 
-    final data = await weatherRepository.getWeather(lat: lat, lon: lon);
+    final data = await weatherRepository.getWeather(token: token, lat: lat, lon: lon);
 
     Map<String, dynamic> location = data['location'];
     Map<String, dynamic> current = data['current'];

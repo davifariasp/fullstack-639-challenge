@@ -28,9 +28,15 @@ class _LoginPageState extends State<LoginPage> {
     passHide = true;
   }
 
-  Future<void> login() async {
-    debugPrint('passou aqui');
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    loading.dispose();
+    super.dispose();
+  }
 
+  Future<void> login() async {
     loading.value = true;
     Map<String, dynamic> response = await authService.login(
         _emailController.text, _passwordController.text);
