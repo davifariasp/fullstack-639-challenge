@@ -1,6 +1,7 @@
 import 'package:app/Repositories/weather_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,8 +12,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   WeatherRepository weatherRepository = WeatherRepository();
+
+  //coordenadas do disp
+  double lat = 0.0;
+  double lon = 0.0;
+
+  //dados vindos da api
   String city = '';
   String region = '';
+  double tempC = 0.0;
+  String day = '';
+  String conditionText = '';
+  String conditionIcon = '';
 
   // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
@@ -46,16 +57,85 @@ class _HomePageState extends State<HomePage> {
     setupInteractedMessage();
   }
 
-  getWeather() async {
-    final data =
-        await weatherRepository.getWeather(lat: -23.5489, lon: -46.6388);
+  getLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
 
-    debugPrint(data.toString());
+    bool permissionLocAllowed = await Geolocator.isLocationServiceEnabled();
+
+    if (!permissionLocAllowed) {
+      return Future.error('Permissão de localização não permitida');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error('Permissão de localização não permitida');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Permissão de localização não permitida');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
     setState(() {
-      Map<String, dynamic> location = data['location'];
+      lat = position.latitude;
+      lon = position.longitude;
+    });
+
+    
+
+  }
+
+  getWeather() async {
+    //pegar coordenadas
+    await getLocation();
+
+    final data =
+        await weatherRepository.getWeather(lat: lat, lon: lon);
+
+    Map<String, dynamic> location = data['location'];
+    Map<String, dynamic> current = data['current'];
+
+    int isDay = current['is_day'];
+
+    setState(() {
+      //dados da cidade
       city = location['name'];
       region = location['region'];
+
+      //dia da semana
+      day = handleDayOfWeek(isDay);
+
+      //dados do clima
+      tempC = current['temp_c'];
+      conditionText = current['condition']['text'];
+      conditionIcon = current['condition']['icon'];
     });
+  }
+
+  String handleDayOfWeek(int day) {
+    switch (day) {
+      case 0:
+        return 'Domingo';
+      case 1:
+        return 'Segunda-feira';
+      case 2:
+        return 'Terça-feira';
+      case 3:
+        return 'Quarta-feira';
+      case 4:
+        return 'Quinta-feira';
+      case 5:
+        return 'Sexta-feira';
+      case 6:
+        return 'Sábado';
+      default:
+        return '';
+    }
   }
 
   @override
@@ -64,14 +144,22 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Challenge 639'),
       ),
-      body: Center(
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Welcome to Challenge 639!',
-              style: TextStyle(fontSize: 24),
-            ),
-            Text('$city - $region')
+            Text('$city - $region'),
+            Text(day),
+            conditionIcon.isNotEmpty
+                ? Image.network('https:$conditionIcon')
+                : const CircularProgressIndicator(
+                    color: Color(0xFF6200EE),
+                  ),
+            Text('$tempC °C'),
+            Text(conditionText),
           ],
         ),
       ),
