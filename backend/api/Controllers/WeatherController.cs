@@ -10,7 +10,7 @@ using api.Services;
 using api.Dtos.Notification;
 
 namespace api.Controllers
-{
+{   
     public class WeatherController : ControllerBase
     {      
         // private readonly FirebaseNotificationService _notificationService;
@@ -19,7 +19,8 @@ namespace api.Controllers
         // {
         //     _notificationService = notificationService;
         // }
-
+        
+        [Authorize]
         [HttpGet("weather/{lat}&{lon}")]   
         public async Task<IActionResult> GetWeather([FromRoute] double lat, [FromRoute] double lon)
         {      

@@ -29,7 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetUsers()
         {   
             var users = await _userRepo.GetAllAsync();
@@ -39,6 +39,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             var user = await _userRepo.GetByIdAsync(id);
