@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using dotenv.net;
-using api.Services;
 using api.Dtos.Notification;
+using api.Interfaces;
 
 namespace api.Controllers
 {   
     public class WeatherController : ControllerBase
     {      
-        // private readonly FirebaseNotificationService _notificationService;
+        private readonly IFirebaseNotificationService _notificationService;
 
-        // public WeatherController(FirebaseNotificationService notificationService)
-        // {
-        //     _notificationService = notificationService;
-        // }
+        public WeatherController(IFirebaseNotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
         
         [Authorize]
         [HttpGet("weather/{lat}&{lon}")]   
@@ -41,16 +41,16 @@ namespace api.Controllers
             }
         }
 
-        // [HttpPost("notification")]
-        // public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
-        // {   
-        //     try {
-        //         await _notificationService.SendNotificationAsync(request.TokenDevice, request.Title, request.Body);
-        //         return Ok();
-        //     } catch (Exception e) {
-        //         return BadRequest(e.Message);
-        //     }
-        // }
+        [HttpPost("notification")]
+        public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
+        {   
+            try {
+                await _notificationService.SendNotificationAsync(request.TokenDevice, request.Title, request.Body);
+                return Ok();
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+        }
 
     }
 }
