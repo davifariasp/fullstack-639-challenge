@@ -1,6 +1,8 @@
 import 'package:app/Repositories/weather_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final storage = const FlutterSecureStorage();
   WeatherRepository weatherRepository = WeatherRepository();
 
   //coordenadas do disp
@@ -85,17 +88,13 @@ class _HomePageState extends State<HomePage> {
       lat = position.latitude;
       lon = position.longitude;
     });
-
-    
-
   }
 
   getWeather() async {
     //pegar coordenadas
     await getLocation();
 
-    final data =
-        await weatherRepository.getWeather(lat: lat, lon: lon);
+    final data = await weatherRepository.getWeather(lat: lat, lon: lon);
 
     Map<String, dynamic> location = data['location'];
     Map<String, dynamic> current = data['current'];
@@ -138,11 +137,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void handleLogout() async {
+    debugPrint('Logout');
+    await storage.delete(key: 'name');
+    await storage.delete(key: 'token');
+
+    Modular.to.navigate('/');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Challenge 639'),
+        backgroundColor: const Color(0xFF6200EE),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(onPressed: handleLogout, icon: const Icon(Icons.logout))
+        ],
       ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,

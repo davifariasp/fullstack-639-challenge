@@ -1,6 +1,7 @@
 import 'package:app/Services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   late ValueNotifier<bool> loading;
   late bool passHide;
   late AuthService authService;
+  final storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -34,6 +36,9 @@ class _LoginPageState extends State<LoginPage> {
         _emailController.text, _passwordController.text);
 
     if (response['token'] != null) {
+      await storage.write(key: 'name', value: response['name']);
+      await storage.write(key: 'token', value: response['token']);
+
       Modular.to.navigate('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
