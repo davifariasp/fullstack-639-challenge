@@ -14,6 +14,8 @@ namespace api.Data
         {
         }
 
+        public DbSet<WeatherAlert> WeatherAlerts { get; set; }
+
         public DbSet<User> Users { get; set; }
     }
 }

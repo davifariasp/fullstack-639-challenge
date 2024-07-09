@@ -8,20 +8,42 @@ using Microsoft.AspNetCore.Mvc;
 using dotenv.net;
 using api.Dtos.Notification;
 using api.Interfaces;
+using api.Dtos.WeatherAlert;
+using api.Mappers;
 
 namespace api.Controllers
 {   
+    [Route("weather")]
+    [ApiController]
     public class WeatherController : ControllerBase
     {      
         private readonly IFirebaseNotificationService _notificationService;
+        private readonly IWeatherAlert _weatherAlertRepository;
 
-        public WeatherController(IFirebaseNotificationService notificationService)
-        {
+        public WeatherController (IWeatherAlert weatherAlertRepository, IFirebaseNotificationService notificationService)
+        {   
+            _weatherAlertRepository = weatherAlertRepository;
             _notificationService = notificationService;
         }
         
         [Authorize]
-        [HttpGet("weather/{lat}&{lon}")]   
+        [HttpPost("alert")]
+        public async Task<IActionResult> createWeatherAlert([FromBody] CreateWeatherAlertRequestDto weatherAlertDto)
+        {
+            var weatherAlert = weatherAlertDto.ToWeatherAlertFromCreateDTO();
+            await _weatherAlertRepository.CreateAsync(weatherAlert);
+            return Ok(
+                new WeatherAlertDto{
+                    Title = weatherAlert.Title,
+                    Lat = weatherAlert.Lat,
+                    Lon = weatherAlert.Lon,
+                    Running = weatherAlert.Running
+                }
+            );
+        }
+
+        [Authorize]
+        [HttpGet("{lat}&{lon}")]   
         public async Task<IActionResult> GetWeather([FromRoute] double lat, [FromRoute] double lon)
         {      
             //pegando a chave da api do arquivo .env
