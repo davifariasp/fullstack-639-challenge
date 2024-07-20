@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
     await storage.delete(key: 'name');
     await storage.delete(key: 'token');
 
-    Modular.to.navigate('/');
+    Modular.to.navigate('/login');
   }
 
   @override

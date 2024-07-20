@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _token!);
 
     if (response['token'] != null) {
-      Modular.to.navigate('/home');
+      Modular.to.navigate('/login');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -159,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: CircularProgressIndicator(
                             color: Colors.white,
                           ))
-                      : const Text("Entrar", style: TextStyle(fontSize: 16));
+                      : const Text("Registrar", style: TextStyle(fontSize: 16));
                 },
               ),
             ),

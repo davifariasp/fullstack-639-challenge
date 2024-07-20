@@ -22,25 +22,25 @@ services:
     depends_on:
       - postgres
   
-  api:
-    container_name: api-639
-    image: api-639
-    build: ./api
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
+  # api:
+  #   container_name: api-639
+  #   image: api-639
+  #   build: ./api
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - postgres
   
-  nginx:
-    container_name: nginx-639
-    image: nginx-639
-    build: ./nginx
-    ports:
-      - 80:80
-    depends_on:
-      - postgres
-      - api
+  # nginx:
+  #   container_name: nginx-639
+  #   image: nginx-639
+  #   build: ./nginx
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - postgres
+  #     - api
     
 volumes:
   database:
