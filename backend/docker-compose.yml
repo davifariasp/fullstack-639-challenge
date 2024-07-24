@@ -22,6 +22,14 @@ services:
     depends_on:
       - postgres
   
+  redis:
+    container_name: redis-639
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+
+
   # api:
   #   container_name: api-639
   #   image: api-639
@@ -44,6 +52,7 @@ services:
     
 volumes:
   database:
+  redis_insight_data:
 
 networks:
   default:

@@ -32,6 +32,11 @@ FirebaseApp.Create(new AppOptions()
 
 builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
 
+builder.Services.AddStackExchangeRedisCache(options => {
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "639";
+});
+
 //Configurando Swagger para autenticacao
 builder.Services.AddSwaggerGen(option =>
 {
