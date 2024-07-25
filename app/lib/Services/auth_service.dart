@@ -6,11 +6,11 @@ import 'dart:convert';
 class AuthService {
   final HttpUse httpUse = HttpUse();
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password, double lat, double lon, String tokenDevice) async {
     final response = await httpUse.post(
       url: '$baseUrl/users/login',
       headers: {'Content-Type': 'application/json'},
-      body: {'email': email, 'password': password},
+      body: {'email': email, 'password': password, 'lat': lat, 'lon': lon, 'tokenDevice': tokenDevice},
     );
 
     if (response.statusCode == 200) {
