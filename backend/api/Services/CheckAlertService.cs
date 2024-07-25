@@ -32,7 +32,7 @@ namespace api.Services
                     await CheckAlertsAndNotify(UserRepository, weatherAlertRepository, notificationService);
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
 
@@ -41,10 +41,16 @@ namespace api.Services
             _logger.LogInformation("Verificando alertas e enviando notificações.");
 
             List<WeatherAlert> alerts = await weatherAlertRepository.GetAllAsync();
-            List<UserOnlineDto> users = userRepository.getUsersOnline();
+            List<UserOnlineDto> users = await userRepository.GetUsersOnline();
 
+            if(users.Count == 0)
+            {
+                Console.WriteLine("0 usuarios");
+            }
          
             users.ForEach(user => {
+                Console.WriteLine("entrou aqui");
+                Console.WriteLine(user.Lat);
                 if (alerts.Any(alert => alert.Lat == user.Lat && alert.Lon == user.Lon))
                 {
                     notificationService.SendNotificationAsync(user.TokenDevice!, "Alerta de clima", "Há um alerta de clima na sua cidade.");

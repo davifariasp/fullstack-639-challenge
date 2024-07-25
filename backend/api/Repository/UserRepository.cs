@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using api.Mappers;
 using Microsoft.Extensions.Caching.Distributed;
 using api.Dtos.User;
+using System.Text.Json;
 
 namespace api.Interfaces.Repository
 {
     public class UserRepository : IUserRepository
-    {   
+    {
         private readonly ApplicationDBContext _context;
         private readonly IDistributedCache _cache;
 
@@ -33,7 +34,7 @@ namespace api.Interfaces.Repository
         }
 
         public async Task<List<User>> GetAllAsync()
-        {   
+        {
             return await _context.Users.ToListAsync();
         }
 
@@ -48,7 +49,7 @@ namespace api.Interfaces.Repository
         }
 
         //usuarios no redis
-        public void setUserOnline(string lat, string lon, string tokenDevice)
+        public async Task SetUserOnline(string lat, string lon, string tokenDevice)
         {
             var user = new
             {
@@ -58,22 +59,39 @@ namespace api.Interfaces.Repository
             };
 
             var userJson = System.Text.Json.JsonSerializer.Serialize(user);
-            _cache.SetString("device:" + tokenDevice, userJson);
+            await _cache.SetStringAsync("user:" + tokenDevice, userJson);
+
+            // Adiciona o token ao conjunto de tokens
+            var tokens = await _cache.GetStringAsync("userTokens");
+            var tokenList = tokens != null ? JsonSerializer.Deserialize<HashSet<string>>(tokens) : new HashSet<string>();
+            tokenList.Add(tokenDevice);
+
+            var updatedTokensJson = JsonSerializer.Serialize(tokenList);
+            await _cache.SetStringAsync("userTokens", updatedTokensJson);
         }
 
-        public List<UserOnlineDto> getUsersOnline()
+        public async Task<List<UserOnlineDto>> GetUsersOnline()
         {
             List<UserOnlineDto> usersOnline = new List<UserOnlineDto>();
 
-            for (int i = 1; i <= 100; i++) // Supondo que o ID máximo do usuário seja 100
+            // Obtém todos os tokens do conjunto
+            var tokensJson = await _cache.GetStringAsync("userTokens");
+            var tokens = tokensJson != null ? JsonSerializer.Deserialize<HashSet<string>>(tokensJson) : new HashSet<string>();
+
+             if (tokens != null){
+                foreach (var token in tokens)
             {
-                var json = _cache.GetString("user:" + i);
+                var key = "user:" + token;
+                var json = await _cache.GetStringAsync(key);
+
                 if (!string.IsNullOrEmpty(json))
                 {
                     UserOnlineDto user = UserOnlineDto.FromJson(json);
                     usersOnline.Add(user);
                 }
             }
+             }
+            
 
             return usersOnline;
         }
