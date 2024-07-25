@@ -17,7 +17,7 @@ namespace api.Dtos.User
         // Opcional: método de fábrica estático para criar UserOnlineDto a partir do JSON
         public static UserOnlineDto FromJson(string json)
         {
-            return JsonSerializer.Deserialize<UserOnlineDto>(json);
+            return JsonSerializer.Deserialize<UserOnlineDto>(json)!;
         }
     }
 }

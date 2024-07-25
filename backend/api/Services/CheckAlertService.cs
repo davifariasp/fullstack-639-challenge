@@ -12,7 +12,6 @@ namespace api.Services
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<CheckAlertService> _logger;
-        private Timer _timer;
 
         public CheckAlertService(ILogger<CheckAlertService> logger, IServiceScopeFactory serviceScopeFactory)
         {
