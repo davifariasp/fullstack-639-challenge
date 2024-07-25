@@ -48,18 +48,17 @@ namespace api.Interfaces.Repository
         }
 
         //usuarios no redis
-        public void setUserOnline(int id, string lat, string lon, string tokenDevice)
+        public void setUserOnline(string lat, string lon, string tokenDevice)
         {
             var user = new
             {
-                id,
                 lat,
                 lon,
                 tokenDevice
             };
 
             var userJson = System.Text.Json.JsonSerializer.Serialize(user);
-            _cache.SetString("user:" + id, userJson);
+            _cache.SetString("device:" + tokenDevice, userJson);
         }
 
         public List<UserOnlineDto> getUsersOnline()

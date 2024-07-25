@@ -9,5 +9,8 @@ namespace api.Dtos.User
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+        public string TokenDevice { get; set; }
     }
 }

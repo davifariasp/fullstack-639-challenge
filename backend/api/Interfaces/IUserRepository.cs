@@ -16,7 +16,7 @@ namespace api.Interfaces
 
         Task<User?> GetByEmailAsync(string email);
 
-        void setUserOnline(int id, string lat, string lon, string deviceToken);
+        void setUserOnline(string lat, string lon, string deviceToken);
         List<UserOnlineDto> getUsersOnline();
     }
 }

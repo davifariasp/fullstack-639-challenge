@@ -83,6 +83,8 @@ namespace api.Controllers
                 return Unauthorized();
             }
 
+            _userRepo.setUserOnline(userDto.Lat.ToString(), userDto.Lon.ToString(), userDto.TokenDevice);
+
             return Ok(
                 new LoginResponseDto
                 {
