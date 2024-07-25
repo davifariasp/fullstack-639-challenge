@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.User;
 using api.Models;
 
 namespace api.Interfaces
@@ -14,5 +15,8 @@ namespace api.Interfaces
         Task<User> CreateAsync(User user);
 
         Task<User?> GetByEmailAsync(string email);
+
+        void setUserOnline(int id, string lat, string lon, string deviceToken);
+        List<UserOnlineDto> getUsersOnline();
     }
 }

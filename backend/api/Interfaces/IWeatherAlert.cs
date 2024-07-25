@@ -10,6 +10,5 @@ namespace api.Interfaces
     {
         Task<List<WeatherAlert>> GetAllAsync();
         Task<WeatherAlert> CreateAsync(WeatherAlert weatherAlert);
-    
     }
 }
