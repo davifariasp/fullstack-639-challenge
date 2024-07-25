@@ -26,9 +26,10 @@ namespace api.Repository
             return weatherAlert;
         }
 
-        public Task<List<WeatherAlert>> GetAllAsync()
-        {
-            return _context.WeatherAlerts.ToListAsync();
+        public async Task<List<WeatherAlert>> GetAllAsync()
+        {   
+            List<WeatherAlert> alerts = await _context.WeatherAlerts.ToListAsync();
+            return alerts;
         }
     }
 }
