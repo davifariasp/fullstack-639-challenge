@@ -30,7 +30,6 @@ FirebaseApp.Create(new AppOptions()
     Credential = GoogleCredential.FromFile("firebase.json")
 });
 
-builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
 
 builder.Services.AddStackExchangeRedisCache(options => {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
@@ -66,11 +65,6 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-builder.Services.AddControllers();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IWeatherAlert, WeatherAlertRepository>();
-builder.Services.AddHostedService<CheckAlertService>();
-
 builder.Services.AddAuthentication( options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -91,7 +85,12 @@ builder.Services.AddAuthentication( options => {
     };
 });
 
+builder.Services.AddControllers();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IWeatherAlert, WeatherAlertRepository>();
+builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddHostedService<CheckAlertService>();
 
 var app = builder.Build();
 

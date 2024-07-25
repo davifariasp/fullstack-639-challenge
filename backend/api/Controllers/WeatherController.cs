@@ -26,7 +26,7 @@ namespace api.Controllers
             _notificationService = notificationService;
         }
         
-        [Authorize]
+        //[Authorize]
         [HttpPost("alert")]
         public async Task<IActionResult> createWeatherAlert([FromBody] CreateWeatherAlertRequestDto weatherAlertDto)
         {
@@ -39,6 +39,14 @@ namespace api.Controllers
                     Lon = weatherAlert.Lon,
                     Running = weatherAlert.Running
                 }
+            );
+        }
+        
+        [HttpGet("alert")]
+        public async Task<IActionResult> listWeatherAlert()
+        {
+            return Ok(
+                await _weatherAlertRepository.GetAllAsync()
             );
         }
 
