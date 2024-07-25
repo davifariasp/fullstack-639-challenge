@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Data;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using api.Mappers;
 using Microsoft.Extensions.Caching.Distributed;
 using api.Dtos.User;
 using System.Text.Json;
+using api.Interfaces;
 
-namespace api.Interfaces.Repository
+namespace api.Repository
 {
     public class UserRepository : IUserRepository
     {
@@ -49,7 +44,7 @@ namespace api.Interfaces.Repository
         }
 
         //usuarios no redis
-        public async Task SetUserOnline(string lat, string lon, string tokenDevice)
+        public async Task SetUserOnline(double lat, double lon, string tokenDevice)
         {
             var user = new
             {
@@ -64,7 +59,7 @@ namespace api.Interfaces.Repository
             // Adiciona o token ao conjunto de tokens
             var tokens = await _cache.GetStringAsync("userTokens");
             var tokenList = tokens != null ? JsonSerializer.Deserialize<HashSet<string>>(tokens) : new HashSet<string>();
-            tokenList.Add(tokenDevice);
+            tokenList!.Add(tokenDevice);
 
             var updatedTokensJson = JsonSerializer.Serialize(tokenList);
             await _cache.SetStringAsync("userTokens", updatedTokensJson);
@@ -85,14 +80,13 @@ namespace api.Interfaces.Repository
                 var json = await _cache.GetStringAsync(key);
 
                 if (!string.IsNullOrEmpty(json))
-                {
+                {   
                     UserOnlineDto user = UserOnlineDto.FromJson(json);
                     usersOnline.Add(user);
                 }
             }
              }
             
-
             return usersOnline;
         }
     }

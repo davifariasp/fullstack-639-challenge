@@ -24,7 +24,7 @@ namespace api.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
-                {   
+                {
                     var UserRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
                     var weatherAlertRepository = scope.ServiceProvider.GetRequiredService<IWeatherAlert>();
                     var notificationService = scope.ServiceProvider.GetRequiredService<IFirebaseNotificationService>();
@@ -43,19 +43,18 @@ namespace api.Services
             List<WeatherAlert> alerts = await weatherAlertRepository.GetAllAsync();
             List<UserOnlineDto> users = await userRepository.GetUsersOnline();
 
-            if(users.Count == 0)
+            if (users.Count != 0)
             {
-                Console.WriteLine("0 usuarios");
-            }
-         
-            users.ForEach(user => {
-                Console.WriteLine("entrou aqui");
-                Console.WriteLine(user.Lat);
-                if (alerts.Any(alert => alert.Lat == user.Lat && alert.Lon == user.Lon))
+                users.ForEach(user =>
                 {
-                    notificationService.SendNotificationAsync(user.TokenDevice!, "Alerta de clima", "Há um alerta de clima na sua cidade.");
-                }
-            });
+
+                    if (alerts.Any(alert => alert.Lat == user.Lat && alert.Lon == user.Lon))
+                    {
+                        notificationService.SendNotificationAsync(user.TokenDevice!, "Alerta de clima", "Há um alerta de clima na sua cidade.");
+                    }
+                });
+            }
+
         }
 
     }

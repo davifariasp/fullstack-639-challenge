@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
 using api.Interfaces;
-using api.Interfaces.Repository;
+using api.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -9,7 +9,6 @@ using api.Services;
 using Microsoft.OpenApi.Models;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using api.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

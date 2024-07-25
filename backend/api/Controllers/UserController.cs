@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.User;
 using api.Interfaces;
 using api.Mappers;
-using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -83,7 +77,7 @@ namespace api.Controllers
                 return Unauthorized();
             }
 
-            await _userRepo.SetUserOnline(userDto.Lat.ToString(), userDto.Lon.ToString(), userDto.TokenDevice);
+            await _userRepo.SetUserOnline(userDto.Lat, userDto.Lon, userDto.TokenDevice);
 
             return Ok(
                 new LoginResponseDto
