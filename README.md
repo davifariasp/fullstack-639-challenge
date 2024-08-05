@@ -15,20 +15,16 @@
 </p>
 
 <div align="center">
-    <img alt="Login" src="https://i.imgur.com/1iCqo2I.png" width="400" />
-    <img alt="Não autorizado" src="https://i.imgur.com/0PcYude.png" width="400" />
+    <img alt="Tela de login" src="https://i.imgur.com/UOdLaqp.png" width="200" />
+     <img alt="Tela de registro" src="https://i.imgur.com/8tbrKrX.png" width="200" />
+     <img alt="Logando" src="https://i.imgur.com/l6B98X7.png" width="200" />
 </div>
 
 <div align="center">
-    <img alt="Home" src="https://i.imgur.com/dI4hcZL.png" width="400" />
-    <img alt="Adicionar" src="https://i.imgur.com/AdoFBZB.png" width="400" />
+    <img alt="Logado" src="https://i.imgur.com/m0WdoED.png" width="200" />
+    <img alt="Uma notificação" src="https://i.imgur.com/ByIOg6Z.png" width="200" />
+    <img alt="Várias notificações" src="https://i.imgur.com/udFfS2t.png" width="200" />
 </div>
-
-<div align="center">
-    <img alt="Home preenchida" src="https://i.imgur.com/ZHaqEwN.png" width="400" />
-    <img alt="Editar" src="https://i.imgur.com/QTCY4gP.png" width="400" />
-</div>
-
 
 ## :page_with_curl: Sobre
 
@@ -86,15 +82,11 @@ No mais, o desafio ficou por parte do tempo. Infelizmente não consegui implemen
 
 ## :rotating_light: Próximo passos
 
-### Ajustar mensageria
-Uma das features a ser implementada era a seguinte:
-Ao ser registrado um alerta climático em determinada região, deve-se enviar notificação para todos os usuários que estejam ali. A proposta que eu dei para isso foi, o usuário ao logar no sistema, enviava sua localização atual para o Redis que iria armazenar as coordenadas. E ai entrava o **cron job** (agendador de tarefas), que ficaria rodando um serviço para verificar no banco de dados se haveria algum alerta climatico e se sim, verificasse no redis os dispositivos que estavam conectados nessa região e enviasse uma notificação.
-
 ### Login social
 
 Dei baixa prioridade a essa feature pois ela não era tão relavente assim pro sistema, e que requer um certo trabalho. Então seria algo a ser implementado, levando em cosideração que tem de haver uma logica relacional entre os dados do login social (via Firebase) e a tabela usuários no PostgreSQL.
 
-## :sunrise: MobX
+### MobX
 
 Priorizei fazer a mudança de estados via setState(), para otimizar o trabalho. Mas seria bom implementar o MobX a título de estudo. 
 
@@ -103,8 +95,10 @@ Priorizei fazer a mudança de estados via setState(), para otimizar o trabalho. 
 As tecnologias a seguir são necessárias para conseguir rodar o projeto em sua máquina.
 
 - Ter [**Git**](https://git-scm.com/) para clonar o projeto.
-- Criar um projeto no [**Firebase**](https://firebase.google.com/) para usar so Cloud messaging.
+- Ter acesso a [**Weather API**](https://www.weatherapi.com/) para pegar os dados climáticos.
+- Criar um projeto no [**Firebase**](https://firebase.google.com/) para usar so Cloud messaging. Baixe o arquivo firebase.json e cole tanto na pasta "app" quanto na pasta "backend/api".
 - Ter [**Docker**](https://www.docker.com/get-started/) para executar o projeto.
+
 
 ## :rocket: Iniciando
 ``` bash
@@ -112,17 +106,17 @@ As tecnologias a seguir são necessárias para conseguir rodar o projeto em sua 
   $ git clone git@github.com:davifariasp/insight-fullstack-challenge.git
 
   # Entrar no diretório:
-  $ cd insight-fullstack-challenge
+  $ cd fullstack-639-challenge
 
   # Entrar da spa:
-  $ cd spa
+  $ cd backend/api
 
   #Adicionar variável de ambiente
   $ nano .env
 
   #Vai colar:
 
-  NEXT_PUBLIC_URL_API = http://localhost:api
+  API_KEY = {CHAVE DE AUTENTICACAO DA WEATHER API}
   
   #Vai salvar
   [CTRL + O] de depois [ENTER]
@@ -132,10 +126,6 @@ As tecnologias a seguir são necessárias para conseguir rodar o projeto em sua 
 
   # Compor o projeto:
   $ docker compose up -d
-
-  # Acesso o front:
-  $ http://localhost
-
-  # Acesso ao back-end:
-  $ http://localhost/api
 ```
+
+Agora o backend esta pronto para ser consumido pelo aplicativo. Vá até a pasta app e rode no simulador Android(!!!). O simulador iOS não permite notificações para usuários que não tem a conta de desenvolvedor.
