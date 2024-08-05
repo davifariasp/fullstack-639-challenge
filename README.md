@@ -62,13 +62,12 @@ Front-end
 - C#
 - Firebase
 - PostgreSQL
-- Redis *
+- Redis
 - Nginx
 - Docker
 - Flutter
 - Dart
 
-* Tecnologia que ainda pretendo implementar no projeto.
 
 ## :sos: Desafios
 
