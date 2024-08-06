@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:app/Repositories/weather_repository.dart';
+import 'package:app/Services/auth_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -28,6 +31,9 @@ class _HomePageState extends State<HomePage> {
   String conditionText = '';
   String conditionIcon = '';
 
+  late AuthService authService;
+  String? _tokenDevice;
+
   // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from
@@ -53,11 +59,28 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    authService = AuthService();
     //pegar os dados climaticos
     getWeather();
     // Run code required to handle interacted messages in an async function
     // as initState() must not be async
     setupInteractedMessage();
+  }
+
+  Future<void> _getToken() async {
+    late String? token;
+
+    if (Platform.isIOS) {
+      token = await FirebaseMessaging.instance.getAPNSToken();
+    } else {
+      token = await FirebaseMessaging.instance.getToken();
+    }
+
+    debugPrint('tokenDevice: $token');
+
+    setState(() {
+      _tokenDevice = token;
+    });
   }
 
   getLocation() async {
@@ -96,7 +119,8 @@ class _HomePageState extends State<HomePage> {
     //pegar coordenadas
     await getLocation();
 
-    final data = await weatherRepository.getWeather(token: token, lat: lat, lon: lon);
+    final data =
+        await weatherRepository.getWeather(token: token, lat: lat, lon: lon);
 
     Map<String, dynamic> location = data['location'];
     Map<String, dynamic> current = data['current'];
@@ -140,9 +164,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void handleLogout() async {
+    await _getToken();
     debugPrint('Logout');
     await storage.delete(key: 'name');
     await storage.delete(key: 'token');
+    debugPrint("token " + _tokenDevice!);
+    final response = await authService.logout(_tokenDevice!);
+    debugPrint(response['message']);
 
     Modular.to.navigate('/login');
   }

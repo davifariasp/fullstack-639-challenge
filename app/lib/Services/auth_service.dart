@@ -21,6 +21,24 @@ class AuthService {
     }
   }
 
+  Future<Map<String, dynamic>>  logout(String tokenDevice) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/users/logout'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {'tokenDevice': tokenDevice},
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return {'message': 'Deslogado com sucesso'};
+    } else {
+      return {'message': 'Erro ao registrar'};
+    }
+  }
+
   Future<Map<String, dynamic>> register(
       String name, String email, String password, String tokenDevice) async {
     final response = await http.post(

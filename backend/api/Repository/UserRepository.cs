@@ -65,6 +65,26 @@ namespace api.Repository
             await _cache.SetStringAsync("userTokens", updatedTokensJson);
         }
 
+        public async Task RemoveUserOnline(string tokenDevice)
+        {
+            // Remove o estado online do usuário
+            await _cache.RemoveAsync("user:" + tokenDevice);
+
+            // Obtenha o conjunto de tokens atual
+            var tokensJson = await _cache.GetStringAsync("userTokens");
+            if (tokensJson != null)
+            {
+                var tokenList = JsonSerializer.Deserialize<HashSet<string>>(tokensJson);
+                if (tokenList != null && tokenList.Remove(tokenDevice))
+                {
+                    // Atualize o conjunto de tokens se houve mudança
+                    var updatedTokensJson = JsonSerializer.Serialize(tokenList);
+                    await _cache.SetStringAsync("userTokens", updatedTokensJson);
+                }
+            }
+        }
+
+
         public async Task<List<UserOnlineDto>> GetUsersOnline()
         {
             List<UserOnlineDto> usersOnline = new List<UserOnlineDto>();
@@ -73,20 +93,21 @@ namespace api.Repository
             var tokensJson = await _cache.GetStringAsync("userTokens");
             var tokens = tokensJson != null ? JsonSerializer.Deserialize<HashSet<string>>(tokensJson) : new HashSet<string>();
 
-             if (tokens != null){
-                foreach (var token in tokens)
+            if (tokens != null)
             {
-                var key = "user:" + token;
-                var json = await _cache.GetStringAsync(key);
+                foreach (var token in tokens)
+                {
+                    var key = "user:" + token;
+                    var json = await _cache.GetStringAsync(key);
 
-                if (!string.IsNullOrEmpty(json))
-                {   
-                    UserOnlineDto user = UserOnlineDto.FromJson(json);
-                    usersOnline.Add(user);
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        UserOnlineDto user = UserOnlineDto.FromJson(json);
+                        usersOnline.Add(user);
+                    }
                 }
             }
-             }
-            
+
             return usersOnline;
         }
     }

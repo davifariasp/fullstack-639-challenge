@@ -88,5 +88,14 @@ namespace api.Controllers
                 }
             );
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutDto logoutDto)
+        {
+
+            await _userRepo.RemoveUserOnline(logoutDto.TokenDevice);
+
+            return Ok();
+        }
     }
 }
