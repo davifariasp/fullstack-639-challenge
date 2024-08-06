@@ -9,7 +9,7 @@
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#sos-desafios">Desafios</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#rotating_light-próximos-passos">Próximos passos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#sunrise-interface">Interface</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#golf-rotas">Rotas</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#books-requisitos">Requisitos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#rocket-iniciando">Iniciando</a>
 </p>
@@ -79,7 +79,7 @@ Agora na parte do desenvolvimento mobile, o desafio foi na questão de configura
 
 No mais, o desafio ficou por parte do tempo. Infelizmente não consegui implementar todas as features, mas consegui explicar bem como seria o desenvolimento.
 
-## :rotating_light: Próximo passos
+## :rotating_light: Próximos passos
 
 ### Login social
 
@@ -98,6 +98,37 @@ As tecnologias a seguir são necessárias para conseguir rodar o projeto em sua 
 - Criar um projeto no [**Firebase**](https://firebase.google.com/) para usar so Cloud messaging. Baixe o arquivo firebase.json e cole tanto na pasta "app" quanto na pasta "backend/api".
 - Ter [**Docker**](https://www.docker.com/get-started/) para executar o projeto.
 
+## :golf: Rotas
+A API oferece Swagger para documentação das rotas, mas aqui vão as principais:
+
+### Criar alerta climático
+`POST - /weather/alert`
+Exemplo de alerta:
+
+```bash
+{
+  "title": "string",
+  "lat": 0,
+  "lon": 0,
+  "running": true
+}
+```
+
+### Pegar tempo de determinada localização
+`POST - /weather/{lat}&{lon}`
+
+### Criar notificação
+`POST - /weather/notification`
+
+Exemplo de alerta:
+
+```bash
+{
+  "tokenDevice": "string",
+  "title": "string",
+  "body": "string"
+}
+```
 
 ## :rocket: Iniciando
 ``` bash
